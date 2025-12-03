@@ -49,7 +49,16 @@ qemu-img create -f qcow2 ubuntu-server.img 20G
 請確保有 ubuntu-16.04.x-server-amd64.iso 檔案。
 ```
 # 啟動並安裝系統
-qemu-system-x86_64 -m 2048 -hda ubuntu-server.img -cdrom ubuntu-16.04.x-server-amd64.iso -enable-kvm
+# 使用 QEMU 2.6.0 + virtio-scsi-pci + 光碟開機
+
+./qemu-2.6.0-rc2/x86_64-softmmu/qemu-system-x86_64 \
+  -enable-kvm \
+  -m 2048 \
+  -hda ubuntu-server.img \
+  -cdrom ubuntu-16.04.7-server-amd64.iso \
+  -device virtio-scsi-pci,id=scsi0 \
+  -net user,hostfwd=tcp::2222-:22 -net nic \
+  -boot d
 ```
   
 ## 攻擊程式碼 (poc.c)
